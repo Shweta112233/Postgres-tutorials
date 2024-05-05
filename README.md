@@ -17,7 +17,7 @@ CREATE table partition3560( same as maintable);
 ALTER maintable add partition partition001000 on values from (0) to (35);
 INSERT into maintable(grades) select floor(random()*100) from generate_series(0, 1000000); # Create a table with a million values
 
-**Docker commands used **
+# Docker commands used
 docker container prune # To remove all the stopped containers
 docker logs -t <tag name> # logs
 docker images #list all images
@@ -27,7 +27,7 @@ docker rm <container name>
 
 host-container port mapping.  by -p <host port>:<container port> 
 
-**postges commands **
+# postges commands
 \d #List of relations /tables
 \d+
 \du # list the existing user
@@ -35,7 +35,7 @@ ALTER USER <user name> WITH PASSWORD '<new password>' #to change the existing us
 postgres is super user
 \q
 
-**# Consistent Hashing for sharding**
+# Consistent Hashing for sharding
 in js hashring is used to implement sharding
 sharding key - where the data is stored is decided by the client (implementation ) based on the sharding key
 Unlike horizontal partitioning , here data is spread across multiple servers ( with same database name). User on the client side implements the sharding logic ( added js implementation file in the repo) 
