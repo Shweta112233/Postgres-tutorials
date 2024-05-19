@@ -1,6 +1,6 @@
 # Postgres-tutorials
 
-1. $docker run --name pg1 -detached -e POSTGRES_PASSWORD=password postgres # to run the docker container for postgres
+1. $docker run --name pg1 -detached -p 5432:5432 -e POSTGRES_PASSWORD=password postgres # to run the docker container for postgres
 2. $docker exec -it pg1 psql -U postgres
 
 # partitioning 
@@ -53,6 +53,23 @@ transaction 2 begin and insert id 2 & acquire exclusive lock on 2. so no other t
 transaction 1 inserts id 2 and now is waiting to acquire exclusive lock on 2. Transaction 2 is holding exclusive lock on id 2 so transaction 1 waits.
 transaction 2 tries to insert id 1 and waits to acquire lock on 1. transaction 1 is holding exclusive lock on id 1 so transaction 1 waits. Both are waiting on each other to release the resource. this is a deadlock
 postgres detects the deadlock and immediately fails and rollback the transaction 2 since it entered last in the deadlock & transaction 1 succedds with inserting id 2.
+
+# Concurrency Control Mechanism
+1. **two phase locking (2pl)** , in first phase you acquire acquire ... locks, in second phase you release release .. locks.
+2. row level locking command -> select * from bookings where id = 1 **for update**. This way the transaction acquires an exclusive lock on the row object. Now other transaction needs to wait to acquire lock. double booking problem.
+3. ![image](https://github.com/Shweta112233/Postgres-tutorials/assets/45368129/78760ff2-cd50-462e-9cf8-24874d1a580c)
+
+Ways of solving the double booking problem 
+1. Exclusive lock using the for update statement.
+2. database also acquires lock implicitly when same row record is modified. Example in image below
+3. here transaction begins & update command -> **update bookings set isbooked = 1, name = 'shweta' where id = 1 and isbooked = 0;** -> acquires lock on the record with id = 1, untill it commits , the other transaction waits for acquire lock to update the row record. in this example , the transaction by default reads the "read committed" transaction so the second transaction doesn't find the isbooked = 1 and therefore no update is done. This is specific to postgres.
+4. ![image](https://github.com/Shweta112233/Postgres-tutorials/assets/45368129/e59550b3-c36c-42cf-8b1c-5c94433fc5f7)
+
+pagination with Offset is very slow
+ConnectionPool in java springboot - HikarCP default.  If you use the spring-boot-starter-jdbc or spring-boot-starter-data-jpa “starters”, you automatically get a dependency to HikariCP.
+Bydefault the config for connection pool size is 10.
+
+
 
 
 
