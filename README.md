@@ -47,7 +47,14 @@ Client implements the sharding logic.
 
 # Deadlock
 When two or more process are waiting for others to release the lock.
-![image](https://github.com/Shweta112233/Postgres-tutorials/assets/45368129/7965f424-6510-49fd-9c7f-a13eefbd5fd8)
+Example - ![image](https://github.com/Shweta112233/Postgres-tutorials/assets/45368129/7965f424-6510-49fd-9c7f-a13eefbd5fd8)
+Here transaction 1 begin and insert id 1 (id is primary key in table test). Even though the transaction is not commited, postgres acquires an exclusive lock on id 1
+transaction 2 begin and insert id 2 & acquire exclusive lock on 2. so no other transaction can insert 2 into table.
+transaction 1 inserts id 2 and now is waiting to acquire exclusive lock on 2. Transaction 2 is holding exclusive lock on id 2 so transaction 1 waits.
+transaction 2 tries to insert id 1 and waits to acquire lock on 1. transaction 1 is holding exclusive lock on id 1 so transaction 1 waits. Both are waiting on each other to release the resource. this is a deadlock
+postgres detects the deadlock and immediately fails and rollback the transaction 2 since it entered last in the deadlock & transaction 1 succedds with inserting id 2.
+
+
 
 
 
