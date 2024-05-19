@@ -45,3 +45,9 @@ With sharding , ATOMIC operations is not possible since data is present on diffe
 Rollback/Transaction is not possible.
 Client implements the sharding logic.
 
+# Deadlock
+When two or more process are waiting for others to release the lock.
+![image](https://github.com/Shweta112233/Postgres-tutorials/assets/45368129/7965f424-6510-49fd-9c7f-a13eefbd5fd8)
+
+
+
